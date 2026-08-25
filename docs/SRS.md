@@ -70,14 +70,16 @@
 
 ## 6. Requirements Traceability Matrix (RTM)
 
-| Requirement ID | User Story | Design Module / Component | Test Case ID | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| FR-002, FR-003, NFR-001 | US-01 | `SearchService.js`, `index.html` | TC-01 | Planned |
-| FR-004, FR-006 | US-02 | `BookingValidator.js`, UI Modal | TC-02 | Planned |
-| FR-005, FR-008, FR-009 | US-03 | `PaymentService.js`, UI Modal | TC-03 | Planned |
-| FR-010, NFR-007 | US-04 | `UserService.js`, `my-bookings.html`| TC-04 | Planned |
-| FR-011 | US-05 | `AdminService.js`, `admin.html` | TC-05 | Planned |
-| FR-011, FR-012 | US-06 | `AdminService.js`, `admin.html` | TC-06 | Planned |
-| FR-007, NFR-004, NFR-005| US-07 | `StorageAdapter.js` (Locking Mock) | TC-07 | Planned |
-| FR-001, NFR-008 | US-08 | `AuditLogger.js` | TC-08 | Planned |
-| NFR-002 | - | `AuthService.js` (SHA-256) | TC-09 | Planned |
+| Requirement ID | User Story | Design Module / Component | Test Case ID | Evidence | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| FR-002, FR-003, NFR-001 | US-01 | `BookingService.js` (`getAllRooms`, `searchRooms`), Home view (`index.html`) | TC-01, TC-02 | `tests/suite.js`, `screenshots/home-room-discovery.png` | Passed |
+| FR-004, FR-006 | US-02 | `BookingService.js` (`validateBooking`, `createBooking`), Booking Modal | TC-03, TC-05 | `tests/suite.js` | Passed |
+| FR-005, FR-008, FR-009 | US-03 | `BookingService.js` (`calculateTotal`, `confirmPayment`), Booking Modal | TC-04, TC-06 | `tests/suite.js` | Passed |
+| FR-010, NFR-007 | US-04 | `BookingService.js` (`getUserBookings`), My Bookings view | TC-11 | `tests/suite.js`, `screenshots/my-bookings.png` | Passed |
+| FR-011 | US-05 | `AdminService.js` (`checkIn`), Admin Dashboard view | TC-07 | `tests/suite.js`, `screenshots/admin-dashboard.png` | Passed |
+| FR-011, FR-012 | US-06 | `AdminService.js` (`markNoShow`), Admin Dashboard view | TC-08 | `tests/suite.js` | Passed |
+| FR-007, NFR-004, NFR-005 | US-07 | `StorageAdapter.js` (`withLock` atomic overlap re-check) | TC-05 | `tests/suite.js`, `docs/architecture.md` §5 | Passed |
+| FR-001, NFR-008 | US-08 | `AuditLogger.js`, audit panel in Admin Dashboard | TC-09 | `tests/suite.js` | Passed |
+| NFR-002 | — | `AuthService.js` (SHA-256 via Web Crypto) | TC-10 | `tests/suite.js` | Passed |
+
+Full test report including manual golden-path verification and the defect log: `docs/testing.md`.
