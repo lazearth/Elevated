@@ -19,9 +19,9 @@
             { id: 'R009', name: 'Innovation Hall', size: 'Large', capacity: 25, rate: 2500, amenities: ['Wifi', 'Sound System', 'Catering'], image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAC_q1_0mXpFKc78M0JisiCgrIHuhZIpnJjCq77WgS0fROo4pCawYkukXZ3MYqqRb1qWToszbe2MT3dqfANKQU7vrZeG43GxVYI8uRp8hzSsNZH3WSli1cjTaTNURlwNmhcgHN2nzvcuMV2lbIc8IYKDZKPw0hAXi_IdeoAkKIhJCBefGXrbICNvKYF3FfUMUkdywAn_EBlEaKDC8jX2COdJ8xxW4iwWF0rblW62qsFkRf2wdRyUcbfLQ' }
         ],
         users: [
-            { id: 'U001', email: 'admin@ems.com', passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', role: 'ADMIN', name: 'System Admin' }, // admin123
-            { id: 'U002', email: 'employee@ems.com', passwordHash: '8e6c434293f06b9b3f36a539ebf85d95646142167d6928e833f8b0561567d12f', role: 'EMPLOYEE', name: 'Jane Smith' }, // emp123
-            { id: 'U003', email: 'student@ems.com', passwordHash: '6d910118671607f9c2d1b7642517865c3e07085c8f12be7c3938885b54350c38', role: 'STUDENT', name: 'John Doe' } // std123
+            { id: 'U001', email: 'admin@ems.com', passwordHash: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', role: 'ADMIN', name: 'System Admin' }, // admin123
+            { id: 'U002', email: 'employee@ems.com', passwordHash: 'e03d3ec8d5035f8721f5dc64546e59ed790dbcb3b7b598fe57057ccd7b683b00', role: 'EMPLOYEE', name: 'Jane Smith' }, // emp123
+            { id: 'U003', email: 'student@ems.com', passwordHash: 'a8cf15ed11889d8d11b49c2cbab0c2be89b17d02b4588eee25cc2c91dace1ba5', role: 'STUDENT', name: 'John Doe' } // std123
         ],
         bookings: [],
         auditLogs: []
@@ -47,6 +47,9 @@
         /**
          * Simulates a transactional lock to prevent concurrency issues.
          * @param {Function} callback - The logic to execute while "locked".
+         *   Receives (data, tx). Use tx.log(...) to record audit entries —
+         *   they are applied AFTER the transaction commits so they are never
+         *   overwritten by the save below.
          * @returns {Promise}
          */
         async withLock(callback) {
@@ -56,8 +59,25 @@
                 setTimeout(() => {
                     try {
                         const data = this.getData();
-                        const result = callback(data);
+                        const pendingLogs = [];
+                        const tx = {
+                            log: (action, details, actor = 'System') => pendingLogs.push({ action, details, actor })
+                        };
+                        const result = callback(data, tx);
                         this.saveData(data);
+
+                        if (pendingLogs.length > 0) {
+                            const fresh = this.getData();
+                            pendingLogs.forEach(l => {
+                                fresh.auditLogs.unshift({
+                                    id: 'LOG' + Date.now() + Math.random().toString(36).substr(2, 5),
+                                    timestamp: new Date().toISOString(),
+                                    ...l
+                                });
+                            });
+                            this.saveData(fresh);
+                        }
+
                         resolve(result);
                     } catch (error) {
                         reject(error);

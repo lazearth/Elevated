@@ -185,21 +185,21 @@
 <div class="bg-background-pure p-stack-md rounded-xl shadow-lg flex flex-col md:flex-row gap-stack-sm items-center justify-between w-full max-w-4xl mx-auto border border-surface-variant">
 <div class="w-full md:w-auto flex-1 relative">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">calendar_today</span>
-<input class="w-full pl-10 pr-4 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary placeholder:text-outline font-body-md text-body-md" id="search-date" type="date"/>
+<input aria-label="Search date" class="w-full pl-10 pr-4 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary placeholder:text-outline font-body-md text-body-md" id="search-date" type="date"/>
 </div>
 <div class="w-full md:w-auto flex-1 flex gap-2">
 <div class="relative flex-1">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">schedule</span>
-<input class="w-full pl-10 pr-2 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md" id="search-start-time" step="3600" type="time"/>
+<input aria-label="Search start time" class="w-full pl-10 pr-2 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md" id="search-start-time" step="3600" type="time"/>
 </div>
 <div class="relative flex-1">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">schedule</span>
-<input class="w-full pl-10 pr-2 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md" id="search-end-time" step="3600" type="time"/>
+<input aria-label="Search end time" class="w-full pl-10 pr-2 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md" id="search-end-time" step="3600" type="time"/>
 </div>
 </div>
 <div class="w-full md:w-auto flex-1 relative">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">groups</span>
-<select class="w-full pl-10 pr-8 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md appearance-none" id="search-size">
+<select aria-label="Filter by room size" class="w-full pl-10 pr-8 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md appearance-none" id="search-size">
 <option value="">Room Size</option>
 <option value="small">Small (up to 6)</option>
 <option value="medium">Medium (up to 15)</option>

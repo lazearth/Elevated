@@ -64,12 +64,12 @@
             const room = this.getAllRooms().find(r => r.id === roomId);
             const totalAmount = this.calculateTotal(room.rate, startTime, endTime);
 
-            return window.EMS.Storage.withLock((data) => {
+            return window.EMS.Storage.withLock((data, tx) => {
                 // Re-check availability inside lock (Atomic check)
                 const isOverlapping = data.bookings.some(b => {
-                    return b.roomId === roomId && 
-                           b.date === date && 
-                           b.status !== 'CANCELLED' && 
+                    return b.roomId === roomId &&
+                           b.date === date &&
+                           b.status !== 'CANCELLED' &&
                            b.status !== 'NO_SHOW' &&
                            ((startTime >= b.startTime && startTime < b.endTime) ||
                             (endTime > b.startTime && endTime <= b.endTime) ||
@@ -95,9 +95,9 @@
                 };
 
                 data.bookings.push(newBooking);
-                
-                window.EMS.Audit.log('BOOKING_CREATED', `Booking ${newBooking.id} created for ${room.name}`, user.email);
-                
+
+                tx.log('BOOKING_CREATED', `Booking ${newBooking.id} created for ${room.name}`, user.email);
+
                 return newBooking;
             });
         },
@@ -105,15 +105,15 @@
         async confirmPayment(bookingId) {
             const user = window.EMS.Auth.getCurrentUser();
             
-            return window.EMS.Storage.withLock((data) => {
+            return window.EMS.Storage.withLock((data, tx) => {
                 const booking = data.bookings.find(b => b.id === bookingId);
                 if (!booking) throw new Error('Booking not found.');
-                
+
                 booking.status = 'CONFIRMED';
                 booking.paymentStatus = 'PAID';
-                
-                window.EMS.Audit.log('PAYMENT_CONFIRMED', `Payment received for ${bookingId}. Status: CONFIRMED.`, user ? user.email : 'System');
-                
+
+                tx.log('PAYMENT_CONFIRMED', `Payment received for ${bookingId}. Status: CONFIRMED.`, user ? user.email : 'System');
+
                 return booking;
             });
         },

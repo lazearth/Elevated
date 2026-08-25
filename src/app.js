@@ -51,14 +51,13 @@
             }
         });
 
-        // Update active class on desktop nav
+        // Update active class on desktop nav (preserve any 'hidden' set by updateAuthState)
         navLinks.forEach(link => {
             const dest = link.getAttribute('data-view');
-            if (dest === viewName) {
-                link.className = "text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-label-md text-label-md transition-colors duration-200 opacity-80 nav-link cursor-pointer";
-            } else {
-                link.className = "text-secondary dark:text-secondary-fixed-dim font-medium font-label-md text-label-md hover:text-primary-container dark:hover:text-primary-fixed transition-colors duration-200 nav-link cursor-pointer";
-            }
+            const base = (dest === viewName)
+                ? "text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-label-md text-label-md transition-colors duration-200 opacity-80 nav-link cursor-pointer"
+                : "text-secondary dark:text-secondary-fixed-dim font-medium font-label-md text-label-md hover:text-primary-container dark:hover:text-primary-fixed transition-colors duration-200 nav-link cursor-pointer";
+            link.className = base + (link.classList.contains('hidden') ? ' hidden' : '');
         });
 
         // Close mobile drawer if open
