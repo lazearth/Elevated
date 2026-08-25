@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Elevated Space - Test Suite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#f9f9ff] text-[#212529] min-h-screen p-8">
+<div class="max-w-5xl mx-auto">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h1 class="text-3xl font-bold text-[#003f87]">Test Suite — Elevated Meeting Space</h1>
+<p class="text-[#5c5f60] mt-1">Unit &amp; integration tests executed directly against the Service Layer (no framework, mirrors the app stack).</p>
+</div>
+<button class="px-4 py-2 bg-[#003f87] text-white rounded-lg font-medium hover:bg-[#0056b3] transition-colors" onclick="location.reload()">Re-run Tests</button>
+</div>
+<div class="bg-white rounded-xl border border-[#e1e2ea] shadow-sm overflow-hidden">
+<div class="px-6 py-4 bg-[#f2f3fc] border-b border-[#e1e2ea] flex justify-between items-center">
+<span class="font-semibold" id="test-summary">Running tests…</span>
+<span class="text-sm text-[#5c5f60]" id="test-duration"></span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#f2f3fc] text-[#5c5f60] uppercase text-xs tracking-wider">
+<th class="p-4 font-semibold">Test ID</th>
+<th class="p-4 font-semibold">Description</th>
+<th class="p-4 font-semibold">Requirement Traced</th>
+<th class="p-4 font-semibold text-right">Result</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#e1e2ea]" id="results-body">
+<tr>
+<td class="p-4 text-[#5c5f60]" colspan="4">Initializing service layer…</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p class="text-xs text-[#727784] mt-4">Note: the suite resets the <code>EMS_DATA</code> localStorage key and the <code>EMS_SESSION</code> sessionStorage key before each test case for full isolation.</p>
+</div>
+
+<!-- System under test: the real production scripts, in dependency order -->
+<script src="../src/StorageAdapter.js"></script>
+<script src="../src/AuditLogger.js"></script>
+<script src="../src/AuthService.js"></script>
+<script src="../src/BookingService.js"></script>
+<script src="../src/AdminService.js"></script>
+<script src="suite.js"></script>
+</body></html>

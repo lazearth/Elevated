@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Elevated Space - Premium Meeting Rooms</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#ffb694",
+                    "on-error-container": "#93000a",
+                    "background-pure": "#FFFFFF",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#626566",
+                    "inverse-surface": "#2e3037",
+                    "outline-variant": "#c2c6d4",
+                    "status-no-show": "#DC3545",
+                    "tertiary-container": "#983c00",
+                    "text-primary": "#212529",
+                    "on-secondary": "#ffffff",
+                    "status-pending": "#FFC107",
+                    "on-surface": "#191c21",
+                    "on-tertiary": "#ffffff",
+                    "surface-tint": "#115cb9",
+                    "on-tertiary-container": "#ffc2a7",
+                    "secondary": "#5c5f60",
+                    "surface-container": "#ededf6",
+                    "primary-container": "#0056b3",
+                    "inverse-on-surface": "#f0f0f9",
+                    "inverse-primary": "#acc7ff",
+                    "on-tertiary-fixed": "#351000",
+                    "on-secondary-fixed": "#191c1d",
+                    "background": "#f9f9ff",
+                    "surface-container-highest": "#e1e2ea",
+                    "on-surface-variant": "#424752",
+                    "surface-container-low": "#f2f3fc",
+                    "primary-fixed-dim": "#acc7ff",
+                    "primary": "#003f87",
+                    "tertiary-fixed": "#ffdbcc",
+                    "on-primary": "#ffffff",
+                    "status-confirmed": "#28A745",
+                    "secondary-fixed": "#e1e3e4",
+                    "on-tertiary-fixed-variant": "#7b2f00",
+                    "on-primary-fixed": "#001a40",
+                    "on-primary-container": "#bbd0ff",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#e1e2ea",
+                    "secondary-container": "#e1e3e4",
+                    "primary-fixed": "#d7e2ff",
+                    "tertiary": "#722b00",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#454748",
+                    "secondary-fixed-dim": "#c5c7c8",
+                    "outline": "#727784",
+                    "surface": "#f9f9ff",
+                    "on-error": "#ffffff",
+                    "status-in-use": "#17A2B8",
+                    "surface-bright": "#f9f9ff",
+                    "surface-container-high": "#e7e8f0",
+                    "on-primary-fixed-variant": "#004491",
+                    "on-background": "#191c21",
+                    "surface-dim": "#d9d9e2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "0.5rem",
+                    "stack-md": "1rem",
+                    "section-padding": "4rem",
+                    "container-max": "1200px",
+                    "stack-lg": "2rem",
+                    "gutter": "1.5rem",
+                    "margin-mobile": "1rem"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-xl": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+
+        .hero-bg-anim {
+            background: linear-gradient(45deg, #f2f3fc, #e1e2ea, #d9d9e2, #f2f3fc);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-background text-text-primary font-body-md antialiased min-h-screen flex flex-col">
+
+<!-- ==================== GLOBAL NAVBAR ==================== -->
+<header class="sticky top-0 z-50 bg-background-pure shadow-sm w-full">
+<div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-16">
+<div class="font-headline-md text-headline-md font-bold text-primary cursor-pointer" onclick="window.EMS.App.switchView('home')">
+                Elevated Space
+            </div>
+<nav class="hidden md:flex space-x-6">
+<a class="nav-link text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md transition-colors duration-200 opacity-80 cursor-pointer" data-view="home" href="#">Home</a>
+<a class="nav-link text-secondary font-medium font-label-md text-label-md hover:text-primary-container transition-colors duration-200 cursor-pointer hidden" data-view="my-bookings" href="#">My Bookings</a>
+<a class="nav-link text-secondary font-medium font-label-md text-label-md hover:text-primary-container transition-colors duration-200 cursor-pointer hidden" data-view="admin-dashboard" href="#">Admin Dashboard</a>
+</nav>
+<div class="flex items-center gap-4">
+<span class="user-display hidden font-label-md text-label-md text-secondary" id="user-display"></span>
+<button class="font-label-md text-label-md font-medium text-primary bg-primary-container/10 px-4 py-2 rounded-lg hover:bg-primary-container/20 transition-colors" id="auth-btn">
+                    Login/Register
+                </button>
+<button class="md:hidden text-on-surface" id="mobile-menu-btn">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+<!-- Mobile Drawer -->
+<div class="md:hidden hidden border-t border-surface-variant bg-background-pure" id="mobile-menu">
+<div class="flex flex-col px-gutter py-stack-sm">
+<a class="mobile-nav-link py-3 font-label-md text-label-md text-primary font-bold border-b border-surface-variant cursor-pointer" data-view="home" href="#">Home</a>
+<a class="mobile-nav-link py-3 font-label-md text-label-md text-secondary hover:text-primary border-b border-surface-variant cursor-pointer hidden" data-view="my-bookings" href="#">My Bookings</a>
+<a class="mobile-nav-link py-3 font-label-md text-label-md text-secondary hover:text-primary border-b border-surface-variant cursor-pointer hidden" data-view="admin-dashboard" href="#">Admin Dashboard</a>
+<button class="mobile-auth-btn py-3 text-left font-label-md text-label-md text-primary font-semibold cursor-pointer" id="mobile-auth-btn">
+                    Login/Register
+                </button>
+</div>
+</div>
+</header>
+
+<main class="flex-grow">
+
+<!-- ==================== VIEW: HOME (Landing / Room Discovery) ==================== -->
+<section id="view-home">
+<!-- Hero Section -->
+<div class="hero-bg-anim w-full pt-24 pb-section-padding px-gutter relative overflow-hidden flex flex-col items-center justify-center text-center">
+<div class="max-w-3xl z-10 relative">
+<h1 class="font-headline-xl text-headline-xl text-primary mb-stack-md">Elevated Meeting Spaces</h1>
+<p class="font-body-lg text-body-lg text-secondary mb-stack-lg">Professional, modern, and efficient rooms designed for productivity.</p>
+<!-- Search Bar (FR-003) -->
+<div class="bg-background-pure p-stack-md rounded-xl shadow-lg flex flex-col md:flex-row gap-stack-sm items-center justify-between w-full max-w-4xl mx-auto border border-surface-variant">
+<div class="w-full md:w-auto flex-1 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">calendar_today</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary placeholder:text-outline font-body-md text-body-md" id="search-date" type="date"/>
+</div>
+<div class="w-full md:w-auto flex-1 flex gap-2">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">schedule</span>
+<input class="w-full pl-10 pr-2 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md" id="search-start-time" step="3600" type="time"/>
+</div>
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">schedule</span>
+<input class="w-full pl-10 pr-2 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md" id="search-end-time" step="3600" type="time"/>
+</div>
+</div>
+<div class="w-full md:w-auto flex-1 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">groups</span>
+<select class="w-full pl-10 pr-8 py-3 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md appearance-none" id="search-size">
+<option value="">Room Size</option>
+<option value="small">Small (up to 6)</option>
+<option value="medium">Medium (up to 15)</option>
+<option value="large">Large (up to 25)</option>
+</select>
+</div>
+<button class="w-full md:w-auto bg-primary text-on-primary px-8 py-3 rounded-lg font-label-md text-label-md font-semibold hover:bg-primary-container transition-colors shadow-sm" onclick="window.EMS.App.handleRoomSearch()">
+                        Search
+                    </button>
+</div>
+</div>
+</div>
+<!-- Room Grid (populated dynamically by app.js / renderRooms) -->
+<div class="max-w-container-max mx-auto px-gutter py-section-padding">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="room-grid">
+</div>
+</div>
+</section>
+
+<!-- ==================== VIEW: MY BOOKINGS (User Dashboard) ==================== -->
+<section class="hidden" id="view-my-bookings">
+<div class="w-full max-w-container-max mx-auto px-gutter py-section-padding">
+<header class="mb-stack-lg flex flex-col md:flex-row md:items-end justify-between gap-stack-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-text-primary mb-stack-sm">My Bookings</h1>
+<p class="font-body-md text-body-md text-secondary">Manage and review your upcoming and past room reservations.</p>
+</div>
+<div class="flex gap-stack-sm" id="booking-filter-tabs">
+<button class="px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md" data-filter="all">All</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors" data-filter="upcoming">Upcoming</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors" data-filter="past">Past</button>
+</div>
+</header>
+<!-- Bookings Table (FR-010) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold">Booking ID</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold">Room Name</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold">Date</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold">Time</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold">Total Paid</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-md text-body-md text-text-primary" id="my-bookings-list">
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== VIEW: ADMIN DASHBOARD ==================== -->
+<section class="hidden" id="view-admin-dashboard">
+<div class="w-full px-gutter max-w-container-max mx-auto py-section-padding">
+<div class="flex justify-between items-end mb-stack-lg">
+<div>
+<h1 class="font-headline-xl text-headline-xl mb-stack-sm">System Bookings</h1>
+<p class="font-body-lg text-body-lg text-secondary">Manage and track all workspace reservations.</p>
+</div>
+</div>
+<!-- Metrics Row -->
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-stack-lg">
+<div class="bg-background-pure rounded-xl border border-surface-variant p-stack-md shadow-sm">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">Total Bookings</p>
+<p class="font-headline-lg text-headline-lg text-primary" id="metric-total-bookings">0</p>
+</div>
+<div class="bg-background-pure rounded-xl border border-surface-variant p-stack-md shadow-sm">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">Confirmed</p>
+<p class="font-headline-lg text-headline-lg text-status-confirmed" id="metric-confirmed">0</p>
+</div>
+<div class="bg-background-pure rounded-xl border border-surface-variant p-stack-md shadow-sm">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">In Use</p>
+<p class="font-headline-lg text-headline-lg text-status-in-use" id="metric-in-use">0</p>
+</div>
+<div class="bg-background-pure rounded-xl border border-surface-variant p-stack-md shadow-sm">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">No-Show</p>
+<p class="font-headline-lg text-headline-lg text-status-no-show" id="metric-no-show">0</p>
+</div>
+<div class="bg-background-pure rounded-xl border border-surface-variant p-stack-md shadow-sm">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">Utilization</p>
+<p class="font-headline-lg text-headline-lg text-primary" id="metric-utilization">0%</p>
+</div>
+</div>
+<!-- All Bookings Table (FR-011, FR-012) -->
+<div class="bg-background-pure rounded-xl shadow-sm border border-surface-container-high overflow-hidden mb-stack-lg">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[800px]">
+<thead>
+<tr class="border-b border-surface-container-high bg-surface-container-low font-label-sm text-label-sm uppercase text-secondary tracking-wider">
+<th class="p-4 font-semibold">Booking ID</th>
+<th class="p-4 font-semibold">User</th>
+<th class="p-4 font-semibold">Room</th>
+<th class="p-4 font-semibold">Date &amp; Time</th>
+<th class="p-4 font-semibold">Status</th>
+<th class="p-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md divide-y divide-surface-container-high" id="admin-bookings-list">
+</tbody>
+</table>
+</div>
+</div>
+<!-- Audit Log Panel (FR-001, NFR-008) -->
+<div class="bg-background-pure rounded-xl shadow-sm border border-surface-container-high overflow-hidden">
+<div class="px-6 py-4 border-b border-surface-container-high bg-surface-container-low flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">history</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Audit Trail</h2>
+</div>
+<ul class="max-h-80 overflow-y-auto" id="admin-logs-list">
+</ul>
+</div>
+</div>
+</section>
+
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="bg-surface-container-low w-full mt-auto border-t border-surface-variant">
+<div class="w-full py-stack-lg px-gutter max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-stack-md">
+<div class="font-headline-md text-headline-md font-bold text-primary">
+                Elevated Space
+            </div>
+<nav class="flex flex-wrap justify-center gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-all" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-all" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-all" href="#">Contact Us</a>
+</nav>
+<div class="font-body-md text-body-md text-on-surface">
+                © 2024 Elevated Space. All rights reserved.
+            </div>
+</div>
+</footer>
+
+<!-- ==================== BOOKING MODAL (FR-006, FR-008, FR-009) ==================== -->
+<div class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-gutter opacity-0 transition-opacity duration-300" id="bookingModal">
+<div class="modal-content bg-background-pure rounded-xl shadow-2xl max-w-lg w-full transform scale-95 transition-transform duration-300 overflow-hidden flex flex-col">
+<div class="px-6 py-4 border-b border-surface-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="font-headline-md text-headline-md text-on-surface">Confirm Booking</h2>
+<button class="text-secondary hover:text-primary transition-colors" onclick="window.EMS.App.closeBookingModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-6 flex-grow overflow-y-auto">
+<div class="mb-6">
+<h3 class="font-headline-lg text-headline-lg text-primary mb-1" id="modalRoomName">Room Name</h3>
+<p class="font-body-md text-body-md text-secondary">Please review your booking details below.</p>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 mb-6 space-y-4">
+<div>
+<label class="font-label-sm text-label-sm text-secondary uppercase tracking-wide">Date</label>
+<input class="w-full mt-1 px-4 py-2.5 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md" id="bookingDateInput" type="date"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="font-label-sm text-label-sm text-secondary uppercase tracking-wide">Start Time</label>
+<select class="w-full mt-1 px-4 py-2.5 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md appearance-none" id="bookingStartSelect">
+<option value="">Select hour</option>
+<option value="08:00">08:00</option>
+<option value="09:00">09:00</option>
+<option value="10:00">10:00</option>
+<option value="11:00">11:00</option>
+<option value="12:00">12:00</option>
+<option value="13:00">13:00</option>
+<option value="14:00">14:00</option>
+<option value="15:00">15:00</option>
+<option value="16:00">16:00</option>
+<option value="17:00">17:00</option>
+<option value="18:00">18:00</option>
+<option value="19:00">19:00</option>
+</select>
+</div>
+<div>
+<label class="font-label-sm text-label-sm text-secondary uppercase tracking-wide">End Time</label>
+<select class="w-full mt-1 px-4 py-2.5 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md appearance-none" id="bookingEndSelect">
+<option value="">Select hour</option>
+<option value="09:00">09:00</option>
+<option value="10:00">10:00</option>
+<option value="11:00">11:00</option>
+<option value="12:00">12:00</option>
+<option value="13:00">13:00</option>
+<option value="14:00">14:00</option>
+<option value="15:00">15:00</option>
+<option value="16:00">16:00</option>
+<option value="17:00">17:00</option>
+<option value="18:00">18:00</option>
+<option value="19:00">19:00</option>
+<option value="20:00">20:00</option>
+</select>
+</div>
+</div>
+<div class="flex justify-between items-center pt-2 border-t border-outline-variant">
+<span class="font-label-md text-label-md text-secondary">Hourly Rate</span>
+<span class="font-body-md text-body-md text-on-surface font-medium" id="modalRoomRate">฿0 / hr</span>
+</div>
+</div>
+<div class="hidden bg-surface-container-lowest border border-outline-variant rounded-lg p-4 mb-6 space-y-3" id="bookingSummaryDetails">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-secondary">Duration</span>
+<span class="font-body-md text-body-md text-on-surface font-medium" id="summaryDuration">0 hrs</span>
+</div>
+</div>
+<div class="flex items-start gap-2 text-status-pending mb-6 bg-status-pending/10 p-3 rounded-lg">
+<span class="material-symbols-outlined text-[20px]">info</span>
+<p class="font-label-sm text-label-sm">A minimum booking duration of 1 hour is required for all meeting spaces. Bookings must be on the hour (no 30-minute intervals).</p>
+</div>
+<div class="hidden border-t border-surface-variant pt-4 flex justify-between items-end" id="modalTotalRow">
+<span class="font-headline-md text-headline-md text-on-surface">Total</span>
+<span class="font-headline-xl text-headline-xl text-primary" id="modalTotalPrice">฿0</span>
+</div>
+</div>
+<div class="px-6 py-4 bg-surface-container-low border-t border-surface-variant flex justify-end gap-3">
+<button class="px-6 py-2 rounded-lg font-label-md text-label-md text-secondary border border-outline-variant hover:bg-surface-variant transition-colors" onclick="window.EMS.App.closeBookingModal()">
+                    Cancel
+                </button>
+<button class="bg-primary text-on-primary px-8 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm flex items-center gap-2" onclick="window.EMS.App.handleBookingSubmit()">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+                    Pay Full Amount
+                </button>
+</div>
+</div>
+</div>
+
+<!-- ==================== AUTH MODAL (Login / Register) ==================== -->
+<div class="fixed inset-0 z-[100] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-gutter opacity-0 transition-opacity duration-300" id="authModal">
+<div class="modal-content bg-background-pure rounded-xl shadow-2xl max-w-md w-full transform scale-95 transition-transform duration-300 overflow-hidden flex flex-col">
+<div class="px-6 pt-6">
+<div class="flex border-b border-surface-variant">
+<button class="flex-1 pb-2 text-center font-bold border-b-2 border-primary text-primary cursor-pointer font-label-md text-label-md" id="authTabLogin" onclick="window.EMS.App.showAuthModal('login')">Sign In</button>
+<button class="flex-1 pb-2 text-center font-medium text-secondary hover:text-on-surface cursor-pointer font-label-md text-label-md" id="authTabRegister" onclick="window.EMS.App.showAuthModal('register')">Register</button>
+</div>
+</div>
+<form class="p-6 flex-grow overflow-y-auto" onsubmit="window.EMS.App.handleAuthSubmit(event)">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-1" id="authModalTitle">Sign In</h2>
+<p class="font-body-md text-body-md text-secondary mb-6">Access your Elevated Space account.</p>
+<input id="authModeInput" type="hidden" value="login"/>
+<div class="space-y-4">
+<div>
+<label class="font-label-sm text-label-sm text-secondary uppercase tracking-wide">Email</label>
+<input autocomplete="email" class="w-full mt-1 px-4 py-2.5 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md" id="authEmail" placeholder="you@company.com" required="" type="email"/>
+</div>
+<div>
+<label class="font-label-sm text-label-sm text-secondary uppercase tracking-wide">Password</label>
+<input autocomplete="current-password" class="w-full mt-1 px-4 py-2.5 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md" id="authPassword" placeholder="••••••••" required="" type="password"/>
+</div>
+<div class="hidden space-y-4" id="authRegisterFields">
+<div>
+<label class="font-label-sm text-label-sm text-secondary uppercase tracking-wide">Full Name</label>
+<input class="w-full mt-1 px-4 py-2.5 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md" id="authName" placeholder="Jane Smith" type="text"/>
+</div>
+<div>
+<label class="font-label-sm text-label-sm text-secondary uppercase tracking-wide">Role</label>
+<select class="w-full mt-1 px-4 py-2.5 rounded-lg border-outline-variant focus:ring-primary focus:border-primary bg-surface-container-lowest text-text-primary font-body-md text-body-md appearance-none" id="authRoleSelect">
+<option value="EMPLOYEE">Employee</option>
+<option value="STUDENT">Student</option>
+</select>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 bg-primary text-on-primary px-8 py-3 rounded-lg font-label-md text-label-md font-semibold hover:bg-primary-container transition-colors shadow-sm" id="authSubmitBtn" type="submit">
+                    Sign In
+                </button>
+<div class="mt-6 pt-4 border-t border-surface-variant">
+<p class="font-label-sm text-label-sm text-secondary mb-3 text-center uppercase tracking-wide">Quick Demo Login</p>
+<div class="grid grid-cols-3 gap-2">
+<button class="px-2 py-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface rounded-lg font-label-sm text-label-sm transition-colors" onclick="window.EMS.App.selectQuickLogin('admin@ems.com','admin123')" type="button">Admin</button>
+<button class="px-2 py-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface rounded-lg font-label-sm text-label-sm transition-colors" onclick="window.EMS.App.selectQuickLogin('employee@ems.com','emp123')" type="button">Employee</button>
+<button class="px-2 py-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface rounded-lg font-label-sm text-label-sm transition-colors" onclick="window.EMS.App.selectQuickLogin('student@ems.com','std123')" type="button">Student</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+
+<!-- ==================== SCRIPTS (dependency order) ==================== -->
+<script src="src/StorageAdapter.js"></script>
+<script src="src/AuditLogger.js"></script>
+<script src="src/AuthService.js"></script>
+<script src="src/BookingService.js"></script>
+<script src="src/AdminService.js"></script>
+<script src="src/app.js"></script>
+</body></html>
