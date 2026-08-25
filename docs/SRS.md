@@ -28,7 +28,7 @@
 | **FR-010** | The system must allow logged-in users to view their current and historical bookings, including booking and payment statuses. | Medium |
 | **FR-011** | The system must allow authorized staff to check in customers and change a booking status to NO_SHOW if they fail to check in within 30 minutes of the start time. | High |
 | **FR-012** | The system must not issue refunds for bookings marked as NO_SHOW. | Medium |
-| **FR-013** | The system must allow customers to cancel their own PENDING/CONFIRMED bookings up to 7 days before the start time; the paid amount is refunded and the time slot is released for re-booking. | Medium |
+| **FR-013** | The system must allow customers to cancel their own PENDING/CONFIRMED bookings within 7 days of purchase (cooling-off period) and before the start time; the paid amount is refunded and the time slot is released for re-booking. | Medium |
 
 ## 4. Non-Functional Requirements (NFRs)
 | ID | Requirement Description | Priority |
@@ -69,8 +69,8 @@
     *   *As an* Admin, *I want* the system to log all booking and payment status changes with timestamps, *so that* I can audit historical actions.
     *   *Acceptance Criteria:* Given any status change (e.g., Pending to Confirmed), When the action occurs, Then the database records the exact date, time, and actor.
 *   **US-09: Customer Cancellation**
-    *   *As a* Customer, *I want to* cancel my booking at least 7 days before it starts, *so that* I get my money back and the room becomes available to others.
-    *   *Acceptance Criteria:* Given a CONFIRMED booking starting more than 7 days from now, When I click Cancel in My Bookings, Then the status becomes CANCELLED, the payment is refunded, the slot is immediately re-bookable, and the action appears in the audit trail. Cancellations inside the 7-day window, and cancellations of other users' bookings, are rejected.
+    *   *As a* Customer, *I want a* 7-day cooling-off window after paying to cancel my booking, *so that* I get my money back and the room becomes available to others.
+    *   *Acceptance Criteria:* Given a CONFIRMED booking purchased within the last 7 days that has not started yet, When I click Cancel in My Bookings, Then the status becomes CANCELLED, the payment is refunded, the slot is immediately re-bookable, and the action appears in the audit trail. Cancellations after the 7-day cooling-off window, of already-started bookings, and of other users' bookings are rejected.
 
 ## 6. Requirements Traceability Matrix (RTM)
 

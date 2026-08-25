@@ -37,7 +37,7 @@ localStorage.removeItem('EMS_DATA'); sessionStorage.removeItem('EMS_SESSION');
 - **Mock payment** — booking stays PENDING until "Pay Full Amount" is processed (FR-009, NFR-006)
 - **Double-booking prevention** — atomic overlap re-check inside a simulated transaction lock (FR-007, NFR-005)
 - **My Bookings** — current/past bookings with status badges, filterable (FR-010)
-- **Customer cancellation** — cancel your own booking up to 7 days before it starts; payment refunded and the slot instantly re-bookable (FR-013)
+- **Customer cancellation** — 7-day cooling-off window after purchase to cancel your own booking (before it starts); payment refunded and the slot instantly re-bookable (FR-013)
 - **Admin dashboard** — all bookings, Check-in (→ IN_USE), No-Show (→ no refund), live metrics (FR-011, FR-012)
 - **Audit trail** — every status change logged with actor and timestamp (FR-001, NFR-008)
 - **Security basics** — SHA-256 password hashing, role-gated views and actions (NFR-002, NFR-003)

@@ -29,7 +29,7 @@
 | TC-09 | BOOKING_CREATED / PAYMENT_CONFIRMED / CHECK_IN are audit-logged with actor and parseable ISO timestamp | FR-001, NFR-008 | `AuditLogger.js` | PASS |
 | TC-10 | Passwords stored as SHA-256 (verified against digest of `admin123`); no plaintext in storage; duplicate-email registration rejected | NFR-002 | `AuthService.js` | PASS |
 | TC-11 | `getUserBookings` returns only the signed-in user's own bookings | FR-010, NFR-007 | `BookingService.js` | PASS |
-| TC-12 | Customers can cancel their own bookings ≥ 7 days before start (status → CANCELLED, payment refunded, slot re-bookable); cancellations inside the window, of others' bookings, and of terminal statuses are rejected; audit entry recorded | FR-013, NFR-007, FR-001 | `BookingService.js` | PASS |
+| TC-12 | Customers can cancel their own bookings within the 7-day cooling-off after purchase and before start time (status → CANCELLED, payment refunded, slot re-bookable); cancellations after the window, of already-started bookings, of others' bookings, and of terminal statuses are rejected; audit entry recorded | FR-013, NFR-007, FR-001 | `BookingService.js` | PASS |
 
 ## 3. Manual UI Verification (Golden Path)
 
@@ -44,7 +44,7 @@
 | 7. Admin "Check-in" on the CONFIRMED booking | Status → IN_USE; action buttons disappear; CHECK_IN entry appears in Audit Trail panel | FR-011, FR-001 | PASS |
 | 8. Search bar (date + time + size) | Room grid narrows to available rooms matching criteria; instant (< 3 s) | FR-003, NFR-001 | PASS |
 | 9. "Book Now" after a search | Booking modal pre-fills the date and start/end times from the search bar — no re-entry needed | FR-006, FR-008 (UX) | PASS |
-| 10. "Cancel" on a booking starting > 7 days away | Confirm dialog → status CANCELLED, payment REFUNDED, Cancel button gone; slot bookable again in a new search; BOOKING_CANCELLED in audit trail | FR-013 | PASS |
+| 10. "Cancel" on a booking still inside the 7-day cooling-off window | Confirm dialog → status CANCELLED, payment REFUNDED, Cancel button gone; slot bookable again in a new search; BOOKING_CANCELLED in audit trail | FR-013 | PASS |
 
 Screenshots: `screenshots/home-room-discovery.png`, `screenshots/my-bookings.png`, `screenshots/admin-dashboard.png`.
 

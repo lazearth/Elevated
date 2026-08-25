@@ -251,7 +251,7 @@
                 </td>
                 <td class="py-4 px-6 text-right">
                     ${canCancel(b) ? `
-                        <button class="px-3 py-1.5 bg-status-no-show/10 hover:bg-status-no-show/20 text-status-no-show rounded-md font-semibold text-label-sm transition-colors flex items-center gap-1 shadow-sm ml-auto" onclick="window.EMS.App.cancelBooking('${b.id}')" title="Cancellable until 7 days before start">
+                        <button class="px-3 py-1.5 bg-status-no-show/10 hover:bg-status-no-show/20 text-status-no-show rounded-md font-semibold text-label-sm transition-colors flex items-center gap-1 shadow-sm ml-auto" onclick="window.EMS.App.cancelBooking('${b.id}')" title="Cancellable within 7 days of purchase, before the booking starts">
                             <span class="material-symbols-outlined text-[16px]">event_busy</span> Cancel
                         </button>
                     ` : `<span class="text-secondary text-label-sm">—</span>`}
