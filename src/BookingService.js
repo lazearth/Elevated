@@ -120,8 +120,8 @@
 
         /**
          * FR-013: Customers may cancel their own PENDING/CONFIRMED booking
-         * no later than 7 days before its start. Paid amounts are refunded
-         * and the time slot becomes available for re-booking.
+         * anytime within 7 days of hitting the "pay" button (cooling-off period).
+         * Paid amounts are refunded and the time slot becomes available for re-booking.
          */
         async cancelBooking(bookingId) {
             const user = window.EMS.Auth.getCurrentUser();
@@ -135,10 +135,18 @@
                     throw new Error('Only PENDING or CONFIRMED bookings can be cancelled.');
                 }
 
-                const startAt = new Date(`${booking.date}T${booking.startTime}`);
-                const cutoff = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-                if (startAt <= cutoff) {
-                    throw new Error('Bookings can only be cancelled at least 7 days before the start time.');
+                // Prevent canceling a meeting that has already started
+                const eventStart = new Date(`${booking.date}T${booking.startTime}`);
+                if (eventStart < new Date()) {
+                    throw new Error('Cannot cancel a booking that has already started or passed.');
+                }
+
+                // Enforce 7-day cooling off period (from time of purchase)
+                const bookingAge = Date.now() - new Date(booking.createdAt).getTime();
+                const sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000;
+                
+                if (bookingAge > sevenDaysInMillis) {
+                    throw new Error('Bookings can only be cancelled within 7 days of purchase.');
                 }
 
                 booking.status = 'CANCELLED';

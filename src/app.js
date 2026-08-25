@@ -179,10 +179,19 @@
     // 4. Render My Bookings
     let currentBookingsFilter = 'all';
 
-    // FR-013: cancellable when still PENDING/CONFIRMED and starting > 7 days from now
+    // FR-013: Cancellable anytime within 7 days of hitting the "pay" button
     function canCancel(b) {
         if (b.status !== 'PENDING' && b.status !== 'CONFIRMED') return false;
-        return new Date(`${b.date}T${b.startTime}`) > new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+        
+        // Prevent canceling if the actual meeting time has already passed
+        const eventStart = new Date(`${b.date}T${b.startTime}`);
+        if (eventStart < new Date()) return false;
+
+        // Check if the current time is within 7 days of the booking creation time
+        const bookingAge = Date.now() - new Date(b.createdAt).getTime();
+        const sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000;
+        
+        return bookingAge <= sevenDaysInMillis;
     }
 
     function renderMyBookings(filter = 'all') {
@@ -399,28 +408,24 @@
         document.getElementById('modalRoomRate').textContent = `฿${room.rate.toLocaleString()} / hr`;
         document.getElementById('modalTotalRow').classList.add('hidden');
 
+        // --- NEW AUTO-FILL LOGIC START ---
+        // 1. Grab current values from the search bar
+        const searchDate = document.getElementById('search-date').value;
+        const searchStart = document.getElementById('search-start-time').value;
+        const searchEnd = document.getElementById('search-end-time').value;
+
+        // 2. Apply search values to modal (fallback to today/empty if search is blank)
+        const todayStr = new Date().toISOString().split('T')[0];
+        document.getElementById('bookingDateInput').value = searchDate || todayStr;
+        
         const startSelect = document.getElementById('bookingStartSelect');
         const endSelect = document.getElementById('bookingEndSelect');
-        startSelect.value = '';
-        endSelect.value = '';
+        startSelect.value = searchStart || '';
+        endSelect.value = searchEnd || '';
 
-        // Default to today, then prefill from the last search so the user
-        // doesn't re-enter the same date/times they just searched with
-        const todayStr = new Date().toISOString().split('T')[0];
-        const searchedDate = document.getElementById('search-date').value;
-        const searchedStart = document.getElementById('search-start-time').value;
-        const searchedEnd = document.getElementById('search-end-time').value;
-
-        document.getElementById('bookingDateInput').value = searchedDate || todayStr;
-        if (searchedStart && [...startSelect.options].some(o => o.value === searchedStart)) {
-            startSelect.value = searchedStart;
-        }
-        if (searchedEnd && [...endSelect.options].some(o => o.value === searchedEnd)) {
-            endSelect.value = searchedEnd;
-        }
-
-        // Update booking summary
+        // 3. Update summary automatically if times were auto-filled
         updateBookingSummary(room.rate);
+        // --- NEW AUTO-FILL LOGIC END ---
 
         const modal = document.getElementById('bookingModal');
         modal.classList.remove('hidden');
@@ -684,6 +689,12 @@
 
     // 9. Initializing Page Wires
     function init() {
+        // --- NEW: Set default search date to today ---
+        const searchDateInput = document.getElementById('search-date');
+        if (searchDateInput) {
+            searchDateInput.value = new Date().toISOString().split('T')[0];
+        }
+        // ---------------------------------------------
         // Nav Links Wireup
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
