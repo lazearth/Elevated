@@ -1,5 +1,7 @@
 # Elevated Space — Meeting Room Booking MVP
 
+For SWE concept purposes only in order to meet the NG211-05 Final Project MVP requirements in one week.
+
 A standalone Single Page Application (SPA) for booking premium meeting rooms, built with **vanilla HTML, CSS (Tailwind) and JavaScript** — no frameworks, no build step, no backend. The browser's `localStorage` simulates the database, as required for the NG211-05 Final Project MVP.
 
 ## Quick Start
