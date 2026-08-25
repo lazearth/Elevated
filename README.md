@@ -37,13 +37,14 @@ localStorage.removeItem('EMS_DATA'); sessionStorage.removeItem('EMS_SESSION');
 - **Mock payment** — booking stays PENDING until "Pay Full Amount" is processed (FR-009, NFR-006)
 - **Double-booking prevention** — atomic overlap re-check inside a simulated transaction lock (FR-007, NFR-005)
 - **My Bookings** — current/past bookings with status badges, filterable (FR-010)
+- **Customer cancellation** — cancel your own booking up to 7 days before it starts; payment refunded and the slot instantly re-bookable (FR-013)
 - **Admin dashboard** — all bookings, Check-in (→ IN_USE), No-Show (→ no refund), live metrics (FR-011, FR-012)
 - **Audit trail** — every status change logged with actor and timestamp (FR-001, NFR-008)
 - **Security basics** — SHA-256 password hashing, role-gated views and actions (NFR-002, NFR-003)
 
 ## Running the Tests
 
-Open `tests/runner.html` in Chrome/Safari. The suite executes 11 test cases against the production service layer and shows Test ID / Description / Requirement Traced / Result. Latest run: **11/11 passed** (report: `docs/testing.md`).
+Open `tests/runner.html` in Chrome/Safari. The suite executes 12 test cases against the production service layer and shows Test ID / Description / Requirement Traced / Result. Latest run: **12/12 passed** (report: `docs/testing.md`).
 
 ## Project Structure
 
@@ -57,7 +58,7 @@ Elevated/
 │   ├── BookingService.js # Search / validation / pricing / overlap checks
 │   ├── AdminService.js   # Check-in & No-Show (FR-011, FR-012)
 │   └── app.js            # SPA routing, rendering, modals, events
-├── tests/                # runner.html + suite.js (11 requirement-traced cases)
+├── tests/                # runner.html + suite.js (12 requirement-traced cases)
 ├── docs/                 # SRS, architecture, testing report, AI usage log, retrospective
 └── screenshots/          # Verification evidence (app views + passing test run)
 ```

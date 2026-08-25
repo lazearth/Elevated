@@ -177,10 +177,19 @@
     }
 
     // 4. Render My Bookings
+    let currentBookingsFilter = 'all';
+
+    // FR-013: cancellable when still PENDING/CONFIRMED and starting > 7 days from now
+    function canCancel(b) {
+        if (b.status !== 'PENDING' && b.status !== 'CONFIRMED') return false;
+        return new Date(`${b.date}T${b.startTime}`) > new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    }
+
     function renderMyBookings(filter = 'all') {
         const container = document.getElementById('my-bookings-list');
         if (!container) return;
 
+        currentBookingsFilter = filter;
         const bookings = window.EMS.Booking.getUserBookings();
         container.innerHTML = '';
 
@@ -194,7 +203,7 @@
         if (filtered.length === 0) {
             container.innerHTML = `
                 <tr>
-                    <td colspan="5" class="py-12 text-center text-secondary">
+                    <td colspan="7" class="py-12 text-center text-secondary">
                         <span class="material-symbols-outlined text-5xl mb-2 text-outline">calendar_today</span>
                         <p class="font-medium">No bookings found in this section.</p>
                     </td>
@@ -230,6 +239,13 @@
                     <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide ${badgeClass}">
                         ${b.status}
                     </span>
+                </td>
+                <td class="py-4 px-6 text-right">
+                    ${canCancel(b) ? `
+                        <button class="px-3 py-1.5 bg-status-no-show/10 hover:bg-status-no-show/20 text-status-no-show rounded-md font-semibold text-label-sm transition-colors flex items-center gap-1 shadow-sm ml-auto" onclick="window.EMS.App.cancelBooking('${b.id}')" title="Cancellable until 7 days before start">
+                            <span class="material-symbols-outlined text-[16px]">event_busy</span> Cancel
+                        </button>
+                    ` : `<span class="text-secondary text-label-sm">—</span>`}
                 </td>
             `;
             container.appendChild(row);
@@ -383,15 +399,25 @@
         document.getElementById('modalRoomRate').textContent = `฿${room.rate.toLocaleString()} / hr`;
         document.getElementById('modalTotalRow').classList.add('hidden');
 
-        // Set date to today as default
-        const todayStr = new Date().toISOString().split('T')[0];
-        document.getElementById('bookingDateInput').value = todayStr;
-
-        // Reset selects
         const startSelect = document.getElementById('bookingStartSelect');
         const endSelect = document.getElementById('bookingEndSelect');
         startSelect.value = '';
         endSelect.value = '';
+
+        // Default to today, then prefill from the last search so the user
+        // doesn't re-enter the same date/times they just searched with
+        const todayStr = new Date().toISOString().split('T')[0];
+        const searchedDate = document.getElementById('search-date').value;
+        const searchedStart = document.getElementById('search-start-time').value;
+        const searchedEnd = document.getElementById('search-end-time').value;
+
+        document.getElementById('bookingDateInput').value = searchedDate || todayStr;
+        if (searchedStart && [...startSelect.options].some(o => o.value === searchedStart)) {
+            startSelect.value = searchedStart;
+        }
+        if (searchedEnd && [...endSelect.options].some(o => o.value === searchedEnd)) {
+            endSelect.value = searchedEnd;
+        }
 
         // Update booking summary
         updateBookingSummary(room.rate);
@@ -617,6 +643,18 @@
         document.getElementById('authTabRegister').className = "flex-1 pb-2 text-center font-medium text-secondary hover:text-on-surface cursor-pointer";
     }
 
+    // 8. Customer cancellation (FR-013)
+    async function cancelBooking(bookingId) {
+        if (!confirm('Cancel this booking? Paid amounts are refunded and the time slot is released.')) return;
+        try {
+            const result = await window.EMS.Booking.cancelBooking(bookingId);
+            alert(`Booking ${result.id} cancelled. Payment: ${result.paymentStatus}.`);
+            renderMyBookings(currentBookingsFilter);
+        } catch (err) {
+            alert(err.message);
+        }
+    }
+
     // 8. Admin operations
     async function adminCheckIn(bookingId) {
         try {
@@ -719,6 +757,7 @@
             selectQuickLogin,
             adminCheckIn,
             adminMarkNoShow,
+            cancelBooking,
             renderMyBookings,
             switchView
         };

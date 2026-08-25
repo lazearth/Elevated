@@ -238,6 +238,54 @@
         assertEquals(mine[0].userId, 'U002', 'Returned booking must belong to the signed-in user');
     });
 
+    // TC-12 — Customer cancellation window and refund (FR-013)
+    test('TC-12', 'Customers can cancel their own bookings at least 7 days before start; the slot is released and the payment refunded.', 'FR-013', async () => {
+        // Far-future booking (60 days out) on R001 -> cancellable
+        const farDate = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        setSession(EMPLOYEE);
+        const far = await window.EMS.Booking.createBooking('R001', farDate, '10:00', '12:00');
+        await window.EMS.Booking.confirmPayment(far.id);
+
+        // Another user must not cancel someone else's booking
+        setSession(STUDENT);
+        await assertRejects(
+            () => window.EMS.Booking.cancelBooking(far.id),
+            'own bookings', 'Users must only cancel their own bookings'
+        );
+
+        // Owner cancels: status CANCELLED, mock payment refunded
+        setSession(EMPLOYEE);
+        const cancelled = await window.EMS.Booking.cancelBooking(far.id);
+        assertEquals(cancelled.status, 'CANCELLED', 'Cancelled booking must be CANCELLED');
+        assertEquals(cancelled.paymentStatus, 'REFUNDED', 'Paid amount must be refunded on cancellation');
+
+        // The slot is bookable again
+        const rebooked = await window.EMS.Booking.createBooking('R001', farDate, '10:00', '12:00');
+        assertEquals(rebooked.status, 'PENDING', 'Released slot must be immediately re-bookable');
+
+        // Near-future booking (3 days out) must NOT be cancellable
+        const nearDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        const near = await window.EMS.Booking.createBooking('R002', nearDate, '10:00', '11:00');
+        await window.EMS.Booking.confirmPayment(near.id);
+        await assertRejects(
+            () => window.EMS.Booking.cancelBooking(near.id),
+            '7 days', 'Cancellations inside the 7-day window must be rejected'
+        );
+
+        // Terminal statuses can no longer be cancelled
+        setSession(ADMIN);
+        await window.EMS.Admin.markNoShow(near.id);
+        setSession(EMPLOYEE);
+        await assertRejects(
+            () => window.EMS.Booking.cancelBooking(near.id),
+            'PENDING or CONFIRMED', 'NO_SHOW bookings must not be cancellable'
+        );
+
+        // Audit trail records the cancellation
+        const actions = window.EMS.Audit.getLogs().map(l => l.action);
+        assert(actions.includes('BOOKING_CANCELLED'), 'Audit log must record BOOKING_CANCELLED');
+    });
+
     // ---------- Runner ----------
     async function run() {
         const results = [];

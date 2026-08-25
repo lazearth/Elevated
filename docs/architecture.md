@@ -15,7 +15,7 @@ To maintain clean code and testability, the application logic is separated into 
 *   **UI/DOM Layer:** Handles rendering data and capturing user events (e.g., clicking "Book Now").
 *   **Service Layer:**
     *   `AuthService.js`: Handles login/registration and password hashing (NFR-002).
-    *   `BookingService.js`: Contains business logic for validating 1-hour minimums (FR-004), calculating costs (FR-005), and enforcing concurrency checks before saving.
+    *   `BookingService.js`: Contains business logic for validating 1-hour minimums (FR-004), calculating costs (FR-005), enforcing concurrency checks before saving, and customer cancellations with the 7-day window rule (FR-013).
     *   `AdminService.js`: Handles Check-in and No-Show state changes (FR-011).
     *   `AuditLogger.js`: Automatically called by other services to log state changes (FR-001).
 *   **Data Access Layer:**
@@ -69,8 +69,8 @@ While using local storage, we structure our JSON to mimic relational database ta
     "startTime": "10:00",
     "endTime": "12:00",
     "totalAmount": 2000,
-    "status": "PENDING | CONFIRMED | IN_USE | NO_SHOW",
-    "paymentStatus": "UNPAID | PAID",
+    "status": "PENDING | CONFIRMED | IN_USE | NO_SHOW | CANCELLED",
+    "paymentStatus": "UNPAID | PAID | REFUNDED",
     "createdAt": "2026-08-25T05:04:19.000Z"
   }
 ]
@@ -82,7 +82,7 @@ While using local storage, we structure our JSON to mimic relational database ta
   {
     "id": "LOG1724555059912x7f3a",
     "timestamp": "2026-08-25T05:04:20.000Z",
-    "action": "BOOKING_CREATED | PAYMENT_CONFIRMED | CHECK_IN | NO_SHOW",
+    "action": "BOOKING_CREATED | PAYMENT_CONFIRMED | CHECK_IN | NO_SHOW | BOOKING_CANCELLED",
     "details": "Booking BKG-NMKRDLGHK created for Focus Pod Alpha",
     "actor": "employee@ems.com"
   }

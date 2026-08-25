@@ -28,6 +28,7 @@
 | **FR-010** | The system must allow logged-in users to view their current and historical bookings, including booking and payment statuses. | Medium |
 | **FR-011** | The system must allow authorized staff to check in customers and change a booking status to NO_SHOW if they fail to check in within 30 minutes of the start time. | High |
 | **FR-012** | The system must not issue refunds for bookings marked as NO_SHOW. | Medium |
+| **FR-013** | The system must allow customers to cancel their own PENDING/CONFIRMED bookings up to 7 days before the start time; the paid amount is refunded and the time slot is released for re-booking. | Medium |
 
 ## 4. Non-Functional Requirements (NFRs)
 | ID | Requirement Description | Priority |
@@ -67,6 +68,9 @@
 *   **US-08: Audit & Traceability**
     *   *As an* Admin, *I want* the system to log all booking and payment status changes with timestamps, *so that* I can audit historical actions.
     *   *Acceptance Criteria:* Given any status change (e.g., Pending to Confirmed), When the action occurs, Then the database records the exact date, time, and actor.
+*   **US-09: Customer Cancellation**
+    *   *As a* Customer, *I want to* cancel my booking at least 7 days before it starts, *so that* I get my money back and the room becomes available to others.
+    *   *Acceptance Criteria:* Given a CONFIRMED booking starting more than 7 days from now, When I click Cancel in My Bookings, Then the status becomes CANCELLED, the payment is refunded, the slot is immediately re-bookable, and the action appears in the audit trail. Cancellations inside the 7-day window, and cancellations of other users' bookings, are rejected.
 
 ## 6. Requirements Traceability Matrix (RTM)
 
@@ -81,5 +85,6 @@
 | FR-007, NFR-004, NFR-005 | US-07 | `StorageAdapter.js` (`withLock` atomic overlap re-check) | TC-05 | `tests/suite.js`, `docs/architecture.md` §5 | Passed |
 | FR-001, NFR-008 | US-08 | `AuditLogger.js`, audit panel in Admin Dashboard | TC-09 | `tests/suite.js` | Passed |
 | NFR-002 | — | `AuthService.js` (SHA-256 via Web Crypto) | TC-10 | `tests/suite.js` | Passed |
+| FR-013, NFR-007 | US-09 | `BookingService.js` (`cancelBooking`), Cancel button in My Bookings view | TC-12 | `tests/suite.js` | Passed |
 
 Full test report including manual golden-path verification and the defect log: `docs/testing.md`.

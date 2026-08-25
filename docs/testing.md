@@ -1,6 +1,6 @@
 # Test Report — Elevated Meeting Space MVP
 
-**Date of run:** 2026-08-25 · **Result:** 11 / 11 automated test cases PASSED · **Evidence:** `screenshots/test-results.png`
+**Date of run:** 2026-08-25 · **Result:** 12 / 12 automated test cases PASSED · **Evidence:** `screenshots/test-results.png`
 
 ## 1. Strategy & Environment
 
@@ -29,6 +29,7 @@
 | TC-09 | BOOKING_CREATED / PAYMENT_CONFIRMED / CHECK_IN are audit-logged with actor and parseable ISO timestamp | FR-001, NFR-008 | `AuditLogger.js` | PASS |
 | TC-10 | Passwords stored as SHA-256 (verified against digest of `admin123`); no plaintext in storage; duplicate-email registration rejected | NFR-002 | `AuthService.js` | PASS |
 | TC-11 | `getUserBookings` returns only the signed-in user's own bookings | FR-010, NFR-007 | `BookingService.js` | PASS |
+| TC-12 | Customers can cancel their own bookings ≥ 7 days before start (status → CANCELLED, payment refunded, slot re-bookable); cancellations inside the window, of others' bookings, and of terminal statuses are rejected; audit entry recorded | FR-013, NFR-007, FR-001 | `BookingService.js` | PASS |
 
 ## 3. Manual UI Verification (Golden Path)
 
@@ -42,6 +43,8 @@
 | 6. Logout → quick-login **Admin** → Admin Dashboard | All bookings listed with status badges; metrics update (Total / Confirmed / In Use / No-Show / Utilization) | FR-011, NFR-003 | PASS |
 | 7. Admin "Check-in" on the CONFIRMED booking | Status → IN_USE; action buttons disappear; CHECK_IN entry appears in Audit Trail panel | FR-011, FR-001 | PASS |
 | 8. Search bar (date + time + size) | Room grid narrows to available rooms matching criteria; instant (< 3 s) | FR-003, NFR-001 | PASS |
+| 9. "Book Now" after a search | Booking modal pre-fills the date and start/end times from the search bar — no re-entry needed | FR-006, FR-008 (UX) | PASS |
+| 10. "Cancel" on a booking starting > 7 days away | Confirm dialog → status CANCELLED, payment REFUNDED, Cancel button gone; slot bookable again in a new search; BOOKING_CANCELLED in audit trail | FR-013 | PASS |
 
 Screenshots: `screenshots/home-room-discovery.png`, `screenshots/my-bookings.png`, `screenshots/admin-dashboard.png`.
 
@@ -58,6 +61,6 @@ This section documents real defects caught by the suite / verification sessions 
 
 ## 5. Requirements Coverage Summary
 
-All 12 FRs and all 8 NFRs from `docs/SRS.md` are covered: FR-002→TC-01, FR-003→TC-02 (+manual step 8), FR-004→TC-03, FR-005→TC-04, FR-006→TC-05, FR-007→TC-05, FR-008→manual step 3, FR-009→TC-06, FR-010→TC-11, FR-011→TC-07/TC-08, FR-012→TC-08, FR-001→TC-09; NFR-001→manual step 8, NFR-002→TC-10, NFR-003→TC-07 (+manual steps 1/6), NFR-004→TC-05, NFR-005→TC-05, NFR-006→TC-06, NFR-007→TC-11, NFR-008→TC-09.
+All 13 FRs and all 8 NFRs from `docs/SRS.md` are covered: FR-002→TC-01, FR-003→TC-02 (+manual steps 8/10), FR-004→TC-03, FR-005→TC-04, FR-006→TC-05, FR-007→TC-05, FR-008→manual step 3, FR-009→TC-06, FR-010→TC-11, FR-011→TC-07/TC-08, FR-012→TC-08, FR-013→TC-12, FR-001→TC-09; NFR-001→manual step 8, NFR-002→TC-10, NFR-003→TC-07 (+manual steps 1/6), NFR-004→TC-05, NFR-005→TC-05, NFR-006→TC-06, NFR-007→TC-11/TC-12, NFR-008→TC-09.
 
 **Known limitation:** true multi-user concurrency across machines cannot be exercised with `localStorage`; NFR-005 is verified logically through the atomic re-check inside `withLock` (documented in `docs/architecture.md` §2 trade-offs).

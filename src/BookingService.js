@@ -118,6 +118,38 @@
             });
         },
 
+        /**
+         * FR-013: Customers may cancel their own PENDING/CONFIRMED booking
+         * no later than 7 days before its start. Paid amounts are refunded
+         * and the time slot becomes available for re-booking.
+         */
+        async cancelBooking(bookingId) {
+            const user = window.EMS.Auth.getCurrentUser();
+            if (!user) throw new Error('User must be logged in.');
+
+            return window.EMS.Storage.withLock((data, tx) => {
+                const booking = data.bookings.find(b => b.id === bookingId);
+                if (!booking) throw new Error('Booking not found.');
+                if (booking.userId !== user.userId) throw new Error('You can only cancel your own bookings.');
+                if (booking.status !== 'PENDING' && booking.status !== 'CONFIRMED') {
+                    throw new Error('Only PENDING or CONFIRMED bookings can be cancelled.');
+                }
+
+                const startAt = new Date(`${booking.date}T${booking.startTime}`);
+                const cutoff = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+                if (startAt <= cutoff) {
+                    throw new Error('Bookings can only be cancelled at least 7 days before the start time.');
+                }
+
+                booking.status = 'CANCELLED';
+                if (booking.paymentStatus === 'PAID') booking.paymentStatus = 'REFUNDED';
+
+                tx.log('BOOKING_CANCELLED', `Booking ${booking.id} cancelled by customer (${booking.date} ${booking.startTime}). Payment: ${booking.paymentStatus}.`, user.email);
+
+                return booking;
+            });
+        },
+
         getUserBookings() {
             const user = window.EMS.Auth.getCurrentUser();
             if (!user) return [];
