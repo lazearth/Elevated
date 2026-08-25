@@ -22,7 +22,7 @@
 | TC-02 | `searchRooms` excludes rooms with overlapping bookings and applies the size filter | FR-003 | `BookingService.js` | PASS |
 | TC-03 | `validateBooking` rejects durations under 1 hour and 30-minute increments; accepts whole hours | FR-004 | `BookingService.js` | PASS |
 | TC-04 | `calculateTotal` returns hourly rate × duration | FR-005 | `BookingService.js` | PASS |
-| TC-05 | `createBooking` stores a PENDING booking; overlapping requests for the same room/date are rejected inside the lock; anonymous booking rejected | FR-006, FR-007, NFR-005 | `BookingService.js`, `StorageAdapter.js` | PASS |
+| TC-05 | `createBooking` stores a PENDING booking; overlapping requests for the same room/date are rejected inside the lock; past dates and already-started same-day slots are rejected; anonymous booking rejected | FR-006, FR-007, NFR-005 | `BookingService.js`, `StorageAdapter.js` | PASS |
 | TC-06 | Booking stays PENDING/UNPAID until `confirmPayment` flips it to CONFIRMED/PAID | FR-009, NFR-006 | `BookingService.js` | PASS |
 | TC-07 | Only admins can check in; only CONFIRMED bookings become IN_USE; non-admins cannot list all bookings | FR-011, NFR-003 | `AdminService.js` | PASS |
 | TC-08 | `markNoShow` sets NO_SHOW and the payment is retained (no refund) | FR-011, FR-012 | `AdminService.js` | PASS |
@@ -45,6 +45,7 @@
 | 8. Search bar (date + time + size) | Room grid narrows to available rooms matching criteria; instant (< 3 s) | FR-003, NFR-001 | PASS |
 | 9. "Book Now" after a search | Booking modal pre-fills the date and start/end times from the search bar — no re-entry needed | FR-006, FR-008 (UX) | PASS |
 | 10. "Cancel" on a booking still inside the 7-day cooling-off window | Confirm dialog → status CANCELLED, payment REFUNDED, Cancel button gone; slot bookable again in a new search; BOOKING_CANCELLED in audit trail | FR-013 | PASS |
+| 11. Booking modal with a past date/time | Date picker's earliest selectable date is today; submitting a past slot (e.g. via console) is rejected with "Bookings cannot be made for past dates or times." | FR-006 | PASS |
 
 Screenshots: `screenshots/home-room-discovery.png`, `screenshots/my-bookings.png`, `screenshots/admin-dashboard.png`.
 

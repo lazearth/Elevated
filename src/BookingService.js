@@ -61,6 +61,12 @@
             const validation = this.validateBooking(startTime, endTime);
             if (!validation.valid) throw new Error(validation.message);
 
+            // FR-006: bookings must start in the future
+            const startAt = new Date(`${date}T${startTime}`);
+            if (startAt < new Date()) {
+                throw new Error('Bookings cannot be made for past dates or times.');
+            }
+
             const room = this.getAllRooms().find(r => r.id === roomId);
             const totalAmount = this.calculateTotal(room.rate, startTime, endTime);
 

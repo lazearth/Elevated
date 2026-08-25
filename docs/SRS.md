@@ -21,7 +21,7 @@
 | **FR-003** | The system must allow users to search for available rooms by start date, start time, end time, and room size. | High |
 | **FR-004** | The system must reject booking requests with a duration of less than 1 hour (no 30-minute intervals). | High |
 | **FR-005** | The system must automatically calculate the total booking price based on the room's hourly rate and the total duration. | High |
-| **FR-006** | The system must allow users to create a booking by selecting a room, date, start time, and end time. | High |
+| **FR-006** | The system must allow users to create a booking by selecting a room, date, start time, and end time; bookings for past dates or times must be rejected. | High |
 | **FR-007** | The system must prevent overlapping confirmed bookings for the same room. | High |
 | **FR-008** | The system must display a summary before payment, including room details, date, times, duration, hourly rate, and total amount. | High |
 | **FR-009** | The system must require full payment before confirming a booking (no late fees/fines). | High |

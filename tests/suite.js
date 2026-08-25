@@ -104,7 +104,7 @@
     });
 
     // TC-05 — Booking creation + double-booking prevention (FR-006, FR-007, NFR-005)
-    test('TC-05', 'createBooking stores a PENDING booking and rejects overlapping requests for the same room.', 'FR-006, FR-007, NFR-005', async () => {
+    test('TC-05', 'createBooking stores a PENDING booking and rejects overlapping or past-dated requests for the same room.', 'FR-006, FR-007, NFR-005', async () => {
         setSession(EMPLOYEE);
 
         const booking = await window.EMS.Booking.createBooking('R001', '2026-09-01', '10:00', '12:00');
@@ -125,6 +125,18 @@
         // Non-overlapping slot on the same room is allowed
         const later = await window.EMS.Booking.createBooking('R001', '2026-09-01', '13:00', '14:00');
         assertEquals(later.status, 'PENDING', 'A non-overlapping booking must succeed');
+
+        // Bookings in the past must be rejected (FR-006)
+        await assertRejects(
+            () => window.EMS.Booking.createBooking('R002', '2020-01-01', '10:00', '11:00'),
+            'past', 'Past dates must be rejected'
+        );
+        const today = new Date();
+        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        await assertRejects(
+            () => window.EMS.Booking.createBooking('R002', todayStr, '00:00', '01:00'),
+            'past', 'Same-day slots that already started must be rejected'
+        );
 
         // Not logged in
         setSession(null);
@@ -274,11 +286,18 @@
         );
 
         // A booking whose start time has passed must NOT be cancellable
-        const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-        const started = await window.EMS.Booking.createBooking('R003', yesterday, '10:00', '11:00');
+        // (past bookings can no longer be created, so simulate: book a future
+        // slot, then rewrite its stored date to yesterday)
+        const started = await window.EMS.Booking.createBooking('R003', futureDate, '15:00', '16:00');
+        const data2 = window.EMS.Storage.getData();
+        const sim = data2.bookings.find(x => x.id === started.id);
+        sim.date = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        sim.startTime = '10:00';
+        sim.endTime = '11:00';
+        window.EMS.Storage.saveData(data2);
         await assertRejects(
             () => window.EMS.Booking.cancelBooking(started.id),
-            'already started', 'Past bookings must not be cancellable'
+            'already started', 'Bookings whose start time passed must not be cancellable'
         );
 
         // Terminal statuses can no longer be cancelled

@@ -415,8 +415,11 @@
         const searchEnd = document.getElementById('search-end-time').value;
 
         // 2. Apply search values to modal (fallback to today/empty if search is blank)
-        const todayStr = new Date().toISOString().split('T')[0];
-        document.getElementById('bookingDateInput').value = searchDate || todayStr;
+        const d = new Date();
+        const todayStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const dateInput = document.getElementById('bookingDateInput');
+        dateInput.min = todayStr;
+        dateInput.value = searchDate || todayStr;
         
         const startSelect = document.getElementById('bookingStartSelect');
         const endSelect = document.getElementById('bookingEndSelect');
