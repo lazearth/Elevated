@@ -1,6 +1,6 @@
 # Contributing Guide — Team Workflow
 
-
+Team Collaboration Guide (5 Members) — Following these guidelines keeps our Git history clean and readable (a key part of our teamwork evaluation) and minimizes painful merge conflicts.
 
 ## 1. One-time setup (each member)
 
