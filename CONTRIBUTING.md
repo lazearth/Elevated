@@ -1,6 +1,6 @@
 # Contributing Guide — Team Workflow
 
-This is how our 5-person team works on this repository. Following it keeps the Git history clean — which is graded evidence of collaboration — and avoids painful merge conflicts.
+
 
 ## 1. One-time setup (each member)
 
