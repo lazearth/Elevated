@@ -540,6 +540,12 @@
             return;
         }
 
+        const { open, close } = window.EMS.Booking.OPERATING_HOURS;
+        if (!window.EMS.Booking.isWithinOperatingHours(startHour, endHour)) {
+            alert(`Search times must fall within operating hours (${open}:00 - ${close}:00).`);
+            return;
+        }
+
         const available = window.EMS.Booking.searchRooms(dateInput, startHour, endHour, sizeInput);
         renderRooms(available);
     }
@@ -691,7 +697,29 @@
     }
 
     // 9. Initializing Page Wires
+    // Generates the hour options for all four time dropdowns from
+    // BookingService.OPERATING_HOURS, so the UI can never drift from the rule.
+    function populateHourSelects() {
+        const { open, close } = window.EMS.Booking.OPERATING_HOURS;
+        const fmt = h => `${String(h).padStart(2, '0')}:00`;
+        const hours = (from, to) => Array.from({ length: to - from + 1 }, (_, i) => from + i);
+
+        const fill = (id, placeholder, list) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.innerHTML = `<option value="">${placeholder}</option>` +
+                list.map(h => `<option value="${fmt(h)}">${fmt(h)}</option>`).join('');
+        };
+
+        fill('search-start-time', 'Start Time', hours(open, close - 1));
+        fill('search-end-time', 'End Time', hours(open + 1, close));
+        fill('bookingStartSelect', 'Select hour', hours(open, close - 1));
+        fill('bookingEndSelect', 'Select hour', hours(open + 1, close));
+    }
+
     function init() {
+        populateHourSelects();
+
         // --- NEW: Set default search date to today ---
         const searchDateInput = document.getElementById('search-date');
         if (searchDateInput) {

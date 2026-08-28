@@ -84,15 +84,18 @@
         assert(smallOnly.length > 0 && smallOnly.every(r => r.size === 'Small'), 'Size filter must only return Small rooms');
     });
 
-    // TC-03 — Minimum 1-hour, whole-hour validation (FR-004)
-    test('TC-03', 'validateBooking rejects durations under 1 hour and 30-minute increments.', 'FR-004', () => {
+    // TC-03 — Minimum 1-hour, whole-hour, operating-hours validation (FR-004)
+    test('TC-03', 'validateBooking rejects durations under 1 hour, 30-minute increments, and slots outside operating hours (10:00-17:00).', 'FR-004', () => {
         const v = window.EMS.Booking.validateBooking;
 
         assert(!v('10:00', '10:30').valid, 'A 30-minute booking must be rejected');
         assert(!v('10:00', '09:00').valid, 'An end time before the start time must be rejected');
         assert(!v('10:30', '11:30').valid, 'Bookings not starting on the hour must be rejected');
         assert(v('10:00', '11:00').valid, 'A whole 1-hour booking must be accepted');
-        assert(v('09:00', '17:00').valid, 'A multi-hour whole-hour booking must be accepted');
+        assert(v('10:00', '17:00').valid, 'A full-day whole-hour booking must be accepted');
+        assert(!v('09:00', '10:00').valid, 'A start before opening (10:00) must be rejected');
+        assert(!v('16:00', '18:00').valid, 'An end after closing (17:00) must be rejected');
+        assert(!v('17:00', '18:00').valid, 'A booking starting at closing time must be rejected');
     });
 
     // TC-04 — Total price = hourly rate × duration (FR-005)
@@ -118,7 +121,7 @@
             'already booked', 'An overlapping booking must be rejected'
         );
         await assertRejects(
-            () => window.EMS.Booking.createBooking('R001', '2026-09-01', '09:00', '11:00'),
+            () => window.EMS.Booking.createBooking('R001', '2026-09-01', '10:00', '13:00'),
             'already booked', 'A booking enclosing the existing slot must be rejected'
         );
 
@@ -126,16 +129,26 @@
         const later = await window.EMS.Booking.createBooking('R001', '2026-09-01', '13:00', '14:00');
         assertEquals(later.status, 'PENDING', 'A non-overlapping booking must succeed');
 
+        // Bookings outside operating hours must be rejected
+        await assertRejects(
+            () => window.EMS.Booking.createBooking('R002', '2099-01-01', '08:00', '09:00'),
+            'operating hours', 'Before-opening bookings must be rejected'
+        );
+        await assertRejects(
+            () => window.EMS.Booking.createBooking('R002', '2099-01-01', '16:00', '18:00'),
+            'operating hours', 'After-closing bookings must be rejected'
+        );
+
         // Bookings in the past must be rejected (FR-006)
         await assertRejects(
             () => window.EMS.Booking.createBooking('R002', '2020-01-01', '10:00', '11:00'),
             'past', 'Past dates must be rejected'
         );
-        const today = new Date();
-        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
         await assertRejects(
-            () => window.EMS.Booking.createBooking('R002', todayStr, '00:00', '01:00'),
-            'past', 'Same-day slots that already started must be rejected'
+            () => window.EMS.Booking.createBooking('R002', yesterdayStr, '10:00', '11:00'),
+            'past', 'Yesterday\'s slots must be rejected'
         );
 
         // Not logged in
@@ -149,7 +162,7 @@
     // TC-06 — Full payment required before CONFIRMED (FR-009, NFR-006)
     test('TC-06', 'A booking stays PENDING/UNPAID until confirmPayment flips it to CONFIRMED/PAID.', 'FR-009, NFR-006', async () => {
         setSession(EMPLOYEE);
-        const booking = await window.EMS.Booking.createBooking('R003', '2026-09-01', '09:00', '11:00');
+        const booking = await window.EMS.Booking.createBooking('R003', '2026-09-01', '10:00', '12:00');
         assertEquals(booking.status, 'PENDING', 'Status must not be CONFIRMED before payment');
         assertEquals(booking.paymentStatus, 'UNPAID', 'Payment status must start as UNPAID');
 
@@ -198,7 +211,7 @@
     // TC-09 — Audit trail with timestamps (FR-001, NFR-008)
     test('TC-09', 'Every status change is written to the audit log with action, actor and ISO timestamp.', 'FR-001, NFR-008', async () => {
         setSession(EMPLOYEE);
-        const booking = await window.EMS.Booking.createBooking('R005', '2026-09-04', '09:00', '10:00');
+        const booking = await window.EMS.Booking.createBooking('R005', '2026-09-04', '13:00', '14:00');
         await window.EMS.Booking.confirmPayment(booking.id);
         setSession(ADMIN);
         await window.EMS.Admin.checkIn(booking.id);

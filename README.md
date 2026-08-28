@@ -32,7 +32,7 @@ localStorage.removeItem('EMS_DATA'); sessionStorage.removeItem('EMS_SESSION');
 
 - **Room discovery** — 9 rooms (Small ฿1,000/hr · Medium ฿2,000/hr · Large ฿2,500/hr) with capacity and amenities (FR-002)
 - **Availability search** by date, time window and room size (FR-003)
-- **Booking rules enforced** — minimum 1 hour, whole-hour blocks only, past dates/times rejected (FR-004, FR-006)
+- **Booking rules enforced** — minimum 1 hour, whole-hour blocks only, within operating hours (10:00–17:00), past dates/times rejected (FR-004, FR-006)
 - **Automatic pricing** — rate × duration, with a full summary before payment (FR-005, FR-008)
 - **Mock payment** — booking stays PENDING until "Pay Full Amount" is processed (FR-009, NFR-006)
 - **Double-booking prevention** — atomic overlap re-check inside a simulated transaction lock (FR-007, NFR-005)

@@ -3,7 +3,20 @@
  * Core business logic for searching rooms and managing bookings.
  */
 (function() {
+    // Single source of truth for operating hours — the UI dropdowns and
+    // search validation are generated from this constant (see app.js).
+    const OPERATING_HOURS = { open: 10, close: 17 };
+
+    // Closure so validateBooking works even when called detached (e.g. tests)
+    const withinOperatingHours = (startTime, endTime) => {
+        const start = parseInt(startTime.split(':')[0], 10);
+        const end = parseInt(endTime.split(':')[0], 10);
+        return start >= OPERATING_HOURS.open && end <= OPERATING_HOURS.close;
+    };
+
     const BookingService = {
+        OPERATING_HOURS,
+
         getAllRooms() {
             return window.EMS.Storage.getData().rooms;
         },
@@ -32,17 +45,25 @@
             });
         },
 
+        isWithinOperatingHours(startTime, endTime) {
+            return withinOperatingHours(startTime, endTime);
+        },
+
         validateBooking(startTime, endTime) {
             const start = parseInt(startTime.split(':')[0]);
             const end = parseInt(endTime.split(':')[0]);
-            
+
             if (end - start < 1) {
                 return { valid: false, message: 'Minimum booking duration is 1 hour.' };
             }
-            
+
             // Check for minutes (must be 00)
             if (startTime.split(':')[1] !== '00' || endTime.split(':')[1] !== '00') {
-                return { valid: false, message: 'Bookings must be on the hour (e.g., 08:00, 09:00).' };
+                return { valid: false, message: 'Bookings must be on the hour (e.g., 10:00, 11:00).' };
+            }
+
+            if (!withinOperatingHours(startTime, endTime)) {
+                return { valid: false, message: `Bookings must fall within operating hours (${OPERATING_HOURS.open}:00 - ${OPERATING_HOURS.close}:00).` };
             }
 
             return { valid: true };

@@ -19,7 +19,7 @@
 | **FR-001** | The system must record a history of changes to Booking and Payment statuses, including date and time, for auditing purposes. | High |
 | **FR-002** | The system must allow users to view all 9 meeting rooms, including their size, capacity, amenities, and hourly rate. | High |
 | **FR-003** | The system must allow users to search for available rooms by start date, start time, end time, and room size. | High |
-| **FR-004** | The system must reject booking requests with a duration of less than 1 hour (no 30-minute intervals). | High |
+| **FR-004** | The system must reject booking requests with a duration of less than 1 hour (no 30-minute intervals) and any booking outside operating hours (10:00 - 17:00). | High |
 | **FR-005** | The system must automatically calculate the total booking price based on the room's hourly rate and the total duration. | High |
 | **FR-006** | The system must allow users to create a booking by selecting a room, date, start time, and end time; bookings for past dates or times must be rejected. | High |
 | **FR-007** | The system must prevent overlapping confirmed bookings for the same room. | High |
