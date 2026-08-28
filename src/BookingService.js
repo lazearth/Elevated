@@ -5,7 +5,7 @@
 (function() {
     // Single source of truth for operating hours — the UI dropdowns and
     // search validation are generated from this constant (see app.js).
-    const OPERATING_HOURS = { open: 10, close: 17 };
+    const OPERATING_HOURS = { open: 10, close: 19 };
 
     // Closure so validateBooking works even when called detached (e.g. tests)
     const withinOperatingHours = (startTime, endTime) => {

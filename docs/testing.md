@@ -20,7 +20,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | TC-01 | Storage seeds all 9 meeting rooms with size, capacity, amenities and hourly rate (3 Small / 3 Medium / 3 Large) | FR-002 | `StorageAdapter.js` | PASS |
 | TC-02 | `searchRooms` excludes rooms with overlapping bookings and applies the size filter | FR-003 | `BookingService.js` | PASS |
-| TC-03 | `validateBooking` rejects durations under 1 hour, 30-minute increments, and slots outside operating hours (10:00-17:00); accepts whole hours within hours | FR-004 | `BookingService.js` | PASS |
+| TC-03 | `validateBooking` rejects durations under 1 hour, 30-minute increments, and slots outside operating hours (10:00-19:00); accepts whole hours within hours | FR-004 | `BookingService.js` | PASS |
 | TC-04 | `calculateTotal` returns hourly rate × duration | FR-005 | `BookingService.js` | PASS |
 | TC-05 | `createBooking` stores a PENDING booking; overlapping requests for the same room/date are rejected inside the lock; out-of-hours, past dates and yesterday's slots are rejected; anonymous booking rejected | FR-006, FR-007, NFR-005 | `BookingService.js`, `StorageAdapter.js` | PASS |
 | TC-06 | Booking stays PENDING/UNPAID until `confirmPayment` flips it to CONFIRMED/PAID | FR-009, NFR-006 | `BookingService.js` | PASS |

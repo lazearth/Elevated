@@ -85,17 +85,17 @@
     });
 
     // TC-03 — Minimum 1-hour, whole-hour, operating-hours validation (FR-004)
-    test('TC-03', 'validateBooking rejects durations under 1 hour, 30-minute increments, and slots outside operating hours (10:00-17:00).', 'FR-004', () => {
+    test('TC-03', 'validateBooking rejects durations under 1 hour, 30-minute increments, and slots outside operating hours (10:00-19:00).', 'FR-004', () => {
         const v = window.EMS.Booking.validateBooking;
 
         assert(!v('10:00', '10:30').valid, 'A 30-minute booking must be rejected');
         assert(!v('10:00', '09:00').valid, 'An end time before the start time must be rejected');
         assert(!v('10:30', '11:30').valid, 'Bookings not starting on the hour must be rejected');
         assert(v('10:00', '11:00').valid, 'A whole 1-hour booking must be accepted');
-        assert(v('10:00', '17:00').valid, 'A full-day whole-hour booking must be accepted');
+        assert(v('10:00', '19:00').valid, 'A full-day whole-hour booking must be accepted');
         assert(!v('09:00', '10:00').valid, 'A start before opening (10:00) must be rejected');
-        assert(!v('16:00', '18:00').valid, 'An end after closing (17:00) must be rejected');
-        assert(!v('17:00', '18:00').valid, 'A booking starting at closing time must be rejected');
+        assert(!v('18:00', '20:00').valid, 'An end after closing (19:00) must be rejected');
+        assert(!v('19:00', '20:00').valid, 'A booking starting at closing time must be rejected');
     });
 
     // TC-04 — Total price = hourly rate × duration (FR-005)
@@ -135,7 +135,7 @@
             'operating hours', 'Before-opening bookings must be rejected'
         );
         await assertRejects(
-            () => window.EMS.Booking.createBooking('R002', '2099-01-01', '16:00', '18:00'),
+            () => window.EMS.Booking.createBooking('R002', '2099-01-01', '18:00', '20:00'),
             'operating hours', 'After-closing bookings must be rejected'
         );
 
